@@ -35,10 +35,15 @@ playAreaEl.addEventListener("click", function(event) {
 }) */
 
 function runQuiz() {
+    var questionEl = document.createElement("h3");
     var answerDiv = document.createElement("div");
+    answerDiv.setAttribute("id", "answer-div");
+    var resultDiv = document.createElement("div");
+    resultDiv.setAttribute("id", "result-div");
 
+    // Get a set of questions and answers and display them
     function getQuestion() {
-        var questionEl = document.createElement("h3");
+        questionEl = document.createElement("h3");
         questionEl.textContent = questions[0].title;
         playAreaEl.append(questionEl);
         playAreaEl.append(answerDiv);
@@ -46,31 +51,61 @@ function runQuiz() {
         for (var k = 0; k < questions[0].choices.length; k++) {
             var answerEl = document.createElement("div");
             answerEl.textContent = questions[0].choices[k];
-            answerEl.setAttribute("data-id", k);
+            answerEl.setAttribute("data-question-id", 0);
+            answerEl.setAttribute("data-answer-id", k);
 
             answerDiv.append(answerEl);
         }
+
+        playAreaEl.append(resultDiv);
+    }
+
+    // Get next question
+    function getNextQuestion() {
+        // Clear out the current question and set of answers
+        questionEl.textContent = "";
+        $("#answer-div").empty();
+
+        // Show the next question
+        getQuestion();
+    }
+
+    // Show a message in the result div
+    function showAnswerResult(message) {
+        // Clear the result div
+        $("#result-div").empty();
+
+        // Rule line
+        var hrEl = document.createElement("hr");
+
+        // Text 
+        var resultTextEl = document.createElement("p");
+        resultTextEl.textContent = message;
+        resultTextEl.style.fontStyle = "italic";
+
+        resultDiv.append(hrEl);
+        resultDiv.append(resultTextEl);
     }
 
     answerDiv.addEventListener("click", function(event) {
         var element = event.target;
 
-        // 
+        var questionIndex = element.getAttribute("data-question-id");
+        var answerIndex = parseInt(element.getAttribute("data-answer-id"));
+
+        // Answered correctly
+        if (answerIndex === parseInt(questions[questionIndex].choices.indexOf(questions[questionIndex].answer))) {
+            // Show that user answered correctly
+            showAnswerResult("Correct!");
+        } else { // Answered incorrectly
+            showAnswerResult("Wrong!");
+        }
+
+        // Get next question
+        getNextQuestion();
     })
 
     // Randomly pull new question from list of available questions
-
-    // At first, pull just first question and display it
-    // var questionEl = document.createElement("h3");
-    // questionEl.textContent = questions[0].title;
-    // playAreaEl.append(questionEl);
-
-    // for (var k = 0; k < questions[0].choices.length; k++) {
-    //     var answerEl = document.createElement("div");
-    //     answerEl.textContent = questions[0].choices[k];
-
-    //     playAreaEl.append(answerEl);
-    // }
 
     // Clear the screen
     $("#play-area").empty();
