@@ -1,13 +1,14 @@
 var playAreaEl = document.getElementById("play-area");
 
+// Generate a random integer
+function getRandomInt(maxInt) {
+    return Math.floor(Math.random() * maxInt);
+}
+
 // When user presses start button:
 // - Clear screen
 // - Randomly pull new question from list of available questions
 // - Start timer
-
-// When user answers question:
-// - If user answers question correctly, display 'Correct!'
-// - If user answers question incorrectly, display 'Wrong!' and decrease time by 15
 
 // When user answers five questions, or when timer runs out:
 // - Show screen to allow user to enter initials
@@ -17,22 +18,6 @@ var playAreaEl = document.getElementById("play-area");
 // - Highscores screen should have 'Go Back' and 'Clear Highscores' buttons
 // - If user clicks 'Go Back' button, show the start screen
 // - If user clicks 'Clear Highscores' button, clear the high scores and update the screen
-
-/*
-playAreaEl.addEventListener("click", function(event) {
-    var element = event.target;
-
-    // Handle button clickss
-    if (element.matches("button")) {
-        var buttonId = element.getAttribute("data-id");
-
-        // switch (element.textContent) {
-        switch (buttonId) {
-            case "start-quiz":
-                // alert("You pressed the start button!");
-        }
-    }
-}) */
 
 function runQuiz() {
     var timerEl = document.getElementById("timer-value");
@@ -55,8 +40,8 @@ function runQuiz() {
             timeLeft--;
             timerEl.textContent = timeLeft;
 
-            if (timeLeft === 0) { // Game over, man!
-                // End the game
+            if (timeLeft <= 0) { // Game over, man!
+                // End the round
             }
         }, 1000);
     }
@@ -91,6 +76,9 @@ function runQuiz() {
     }
 
     // Show a message in the result div
+    // When user answers question:
+    // - If user answers question correctly, display 'Correct!'
+    // - If user answers question incorrectly, display 'Wrong!' and decrease time by wrongAnswerDecrement
     function showAnswerResult(message) {
         // Clear the result div
         $("#result-div").empty();
