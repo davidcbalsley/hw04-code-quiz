@@ -20,15 +20,25 @@ function getRandomInt(maxInt) {
 // - If user clicks 'Clear Highscores' button, clear the high scores and update the screen
 
 function runQuiz() {
+    /* Elements */
     var timerEl = document.getElementById("timer-value");
-    var maxTimer = 75; // The maximum number of seconds for the game
-    var timeLeft = 0;  // The number of seconds remaining in a round of play
-    var wrongAnswerDecrement = 15; // The number of seconds to subtract for each wrong answer
     var questionEl = document.createElement("h3");
     var answerDiv = document.createElement("div");
     answerDiv.setAttribute("id", "answer-div");
     var resultDiv = document.createElement("div");
     resultDiv.setAttribute("id", "result-div");
+    var indicesOfQuestionsAlreadyAsked = [];
+    
+    /* Variables */
+    var maxTimer = 75; // The maximum number of seconds for the game
+    var timeLeft = 0;  // The number of seconds remaining in a round of play
+    var maxAnswerDisplayTime = 2; // The number of seconds to display the 'Correct!' or 'Wrong!'
+    var displayTimeLeft = 0; // The number of seconds remaining for displaying 'Correct' or 'Wrong'
+    var wrongAnswerDecrement = 15; // The number of seconds to subtract for each wrong answer
+    var numQuestionsAsked = 0; // The number of questions that we've asked
+    var maxNumQuestions = 5; // The total number of questions to ask
+
+    /* Functions */
 
     // Run the timer
     function runTimer() {
@@ -36,31 +46,43 @@ function runQuiz() {
         timeLeft = maxTimer;
         timerEl.textContent = timeLeft;
 
-        var timerInterval = setInterval(function() {
+        var roundTimerInterval = setInterval(function() {
             timeLeft--;
             timerEl.textContent = timeLeft;
 
-            if (timeLeft <= 0) { // Game over, man!
-                // End the round
+            if (timeLeft <= 0) { 
+                clearInterval(roundTimerInterval);
             }
         }, 1000);
     }
 
     // Get a set of questions and answers and display them
     function getQuestion() {
-        questionEl = document.createElement("h3");
-        questionEl.textContent = questions[0].title;
+        questionEl = document.createElement("h3");  
         playAreaEl.append(questionEl);
         playAreaEl.append(answerDiv);
 
-        for (var k = 0; k < questions[0].choices.length; k++) {
+        var currentQuestionIndex = 0; // Index into the qeustions array for the current question
+
+        // Randomly choose a question that has not yet been asked
+        do {
+            currentQuestionIndex = getRandomInt(questions.length); 
+        } while (indicesOfQuestionsAlreadyAsked.indexOf(currentQuestionIndex) >= 0);
+
+        questionEl.textContent = questions[currentQuestionIndex].title;
+
+        for (var k = 0; k < questions[currentQuestionIndex].choices.length; k++) {
             var answerEl = document.createElement("div");
-            answerEl.textContent = questions[0].choices[k];
-            answerEl.setAttribute("data-question-id", 0);
+            answerEl.textContent = questions[currentQuestionIndex].choices[k];
+            answerEl.setAttribute("data-question-id", currentQuestionIndex);
             answerEl.setAttribute("data-answer-id", k);
 
             answerDiv.append(answerEl);
         }
+
+        // Record that we already asked this question
+        indicesOfQuestionsAlreadyAsked.push(currentQuestionIndex);
+        console.log("indicesOFQuestionsAlreadyAsked = " + indicesOfQuestionsAlreadyAsked);
 
         playAreaEl.append(resultDiv);
     }
@@ -93,6 +115,18 @@ function runQuiz() {
 
         resultDiv.append(hrEl);
         resultDiv.append(resultTextEl);
+
+        displayTimeLeft = maxAnswerDisplayTime;
+
+        // Display 'Correct!' or 'Wrong!' for a little bit, then make it go away
+        var resultTimerInterval = setInterval(function() {
+            displayTimeLeft--;
+
+            if (displayTimeLeft === 0) {
+                clearInterval(resultTimerInterval);
+                $("#result-div").empty();
+            }
+        }, 1000);
     }
 
     answerDiv.addEventListener("click", function(event) {

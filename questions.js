@@ -27,10 +27,10 @@ var questions = [
     {
         title: "Bootstrap is mobile-responsive by default.",
         choices: ["true", "false"],
-        answer: "True"
+        answer: "true"
     },
     {
-        title: "In a Bootstrap grid, the sum total of all columns within a row must add up to ___ .,
+        title: "In a Bootstrap grid, the sum total of all columns within a row must add up to ___ .",
         choices: ["8", "10", "12", "15"],
         answer: "12"
     },
