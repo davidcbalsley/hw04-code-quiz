@@ -37,6 +37,7 @@ function runQuiz() {
     var wrongAnswerDecrement = 15; // The number of seconds to subtract for each wrong answer
     var numQuestionsAsked = 0; // The number of questions that we've asked
     var maxNumQuestions = 5; // The total number of questions to ask
+    var roundTimerInterval;
 
     /* Functions */
 
@@ -46,7 +47,8 @@ function runQuiz() {
         timeLeft = maxTimer;
         timerEl.textContent = timeLeft;
 
-        var roundTimerInterval = setInterval(function() {
+        roundTimerInterval = setInterval(function() {
+        // var roundTimerInterval = setInterval(function() {
             timeLeft--;
             timerEl.textContent = timeLeft;
 
@@ -82,7 +84,9 @@ function runQuiz() {
 
         // Record that we already asked this question
         indicesOfQuestionsAlreadyAsked.push(currentQuestionIndex);
-        console.log("indicesOFQuestionsAlreadyAsked = " + indicesOfQuestionsAlreadyAsked);
+
+        // Increment number of questions asked
+        numQuestionsAsked++;
 
         playAreaEl.append(resultDiv);
     }
@@ -144,8 +148,14 @@ function runQuiz() {
             timeLeft -= wrongAnswerDecrement;
         }
 
-        // Get next question
-        getNextQuestion();
+        if ((numQuestionsAsked < maxNumQuestions) && (numQuestionsAsked < questions.length)) {
+            // Get next question
+            getNextQuestion();
+        } else { 
+            // Asked all the questions -- stop the timer and show all done screen
+            clearInterval(roundTimerInterval);
+            showAllDoneScreen();
+        }
     })
 
     // Randomly pull new question from list of available questions
@@ -181,6 +191,10 @@ function showStartScreen() {
     playAreaEl.append(headerEl);
     playAreaEl.append(descriptionEl);
     playAreaEl.append(startQuizButton); 
+}
+
+function showAllDoneScreen () {
+    // Nothing yet
 }
 
 // On initial page load, show start screen
