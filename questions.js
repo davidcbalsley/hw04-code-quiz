@@ -10,43 +10,43 @@ var questions = [
         answer: "specificity"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "CSS works by hooking onto ___ .",
+        choices: ["selectors", "attachments", "connectors", "methods"],
+        answer: "selectors"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "By default, a block element will take up ___ .",
+        choices: ["an entire column of space", "the lower-right corener of the browser window", "a new tab", "an entire line of space"],
+        answer: "an entire line of space"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "Which tool could be used to style an element when a user mouses over it?",
+        choices: ["pseudo-classes", "GitHub", "float", "opacity"],
+        answer: "pseudo-classes"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "Bootstrap is mobile-responsive by default.",
+        choices: ["true", "false"],
+        answer: "True"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "In a Bootstrap grid, the sum total of all columns within a row must add up to ___ .,
+        choices: ["8", "10", "12", "15"],
+        answer: "12"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "___ define how CSS styles are applied in relation to the characteristics of the device viewport.",
+        choices: ["Tabs", "Objects", "Cookies", "Media queries"],
+        answer: "Media queries"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "Which of the following is NOT a feature of an API?",
+        choices: ["methods", "properties", "tasks", "events"],
+        answer: "tasks"
     },
     {
-        title: "",
-        choices: [],
-        answer: ""
+        title: "Which of the following is NOT a building block of the web?",
+        choices: ["HTML", "CSS", "JavaScript", "IP theft"],
+        answer: "IP theft"
     }
 ]
