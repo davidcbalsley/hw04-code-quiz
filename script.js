@@ -35,11 +35,31 @@ playAreaEl.addEventListener("click", function(event) {
 }) */
 
 function runQuiz() {
+    var timerEl = document.getElementById("timer-value");
+    var maxTimer = 75; // The maximum number of seconds for the game
+    var timeLeft = 0;  // The number of seconds remaining in a round of play
+    var wrongAnswerDecrement = 15; // The number of seconds to subtract for each wrong answer
     var questionEl = document.createElement("h3");
     var answerDiv = document.createElement("div");
     answerDiv.setAttribute("id", "answer-div");
     var resultDiv = document.createElement("div");
     resultDiv.setAttribute("id", "result-div");
+
+    // Run the timer
+    function runTimer() {
+        // Set time left to the maximum amount of time and update the onscreen timer
+        timeLeft = maxTimer;
+        timerEl.textContent = timeLeft;
+
+        var timerInterval = setInterval(function() {
+            timeLeft--;
+            timerEl.textContent = timeLeft;
+
+            if (timeLeft === 0) { // Game over, man!
+                // End the game
+            }
+        }, 1000);
+    }
 
     // Get a set of questions and answers and display them
     function getQuestion() {
@@ -99,6 +119,7 @@ function runQuiz() {
             showAnswerResult("Correct!");
         } else { // Answered incorrectly
             showAnswerResult("Wrong!");
+            timeLeft -= wrongAnswerDecrement;
         }
 
         // Get next question
@@ -109,6 +130,9 @@ function runQuiz() {
 
     // Clear the screen
     $("#play-area").empty();
+
+    // Start the timer
+    runTimer();
 
     // Pull the first question
     getQuestion();
@@ -126,6 +150,7 @@ function showStartScreen() {
         runQuiz();
     })
 
+    // Fill in the text for the header, description, and start button
     headerEl.textContent = "Coding Quiz Challenge";
     descriptionEl.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
     startQuizButton.textContent = "Start Quiz";
