@@ -21,22 +21,22 @@ function getRandomInt(maxInt) {
 
 function runQuiz() {
     /* Elements */
-    var timerEl = document.getElementById("timer-value");
-    var questionEl = document.createElement("h3");
-    var answerDiv = document.createElement("div");
+    var timerEl = document.getElementById("timer-value");   // The element for the countdown timer
+    var questionEl = document.createElement("h3");          // The element for the question
+    var answerDiv = document.createElement("div");          // A div to hold the answer choices
     answerDiv.setAttribute("id", "answer-div");
-    var resultDiv = document.createElement("div");
+    var resultDiv = document.createElement("div");          // A div to hold the result of the user's guess -- 'Correct!' or 'Wrong!'
     resultDiv.setAttribute("id", "result-div");
-    var indicesOfQuestionsAlreadyAsked = [];
+    var indicesOfQuestionsAlreadyAsked = [];                // Indices of questions array for questions that have already been asked
     
     /* Variables */
-    var maxTimer = 75; // The maximum number of seconds for the game
-    var timeLeft = 0;  // The number of seconds remaining in a round of play
-    var maxAnswerDisplayTime = 2; // The number of seconds to display the 'Correct!' or 'Wrong!'
-    var displayTimeLeft = 0; // The number of seconds remaining for displaying 'Correct' or 'Wrong'
-    var wrongAnswerDecrement = 15; // The number of seconds to subtract for each wrong answer
-    var numQuestionsAsked = 0; // The number of questions that we've asked
-    var maxNumQuestions = 5; // The total number of questions to ask
+    var maxTimer = 75;              // The maximum number of seconds for the game
+    var timeLeft = 0;               // The number of seconds remaining in a round of play
+    var maxAnswerDisplayTime = 2;   // The number of seconds to display the 'Correct!' or 'Wrong!'
+    var displayTimeLeft = 0;        // The number of seconds remaining for displaying 'Correct' or 'Wrong'
+    var wrongAnswerDecrement = 10;  // The number of seconds to subtract for each wrong answer
+    var numQuestionsAsked = 0;      // The number of questions that we've asked
+    var maxNumQuestions = 5;        // The total number of questions to ask
     var roundTimerInterval;
 
     /* Functions */
@@ -48,12 +48,19 @@ function runQuiz() {
         timerEl.textContent = timeLeft;
 
         roundTimerInterval = setInterval(function() {
-        // var roundTimerInterval = setInterval(function() {
             timeLeft--;
             timerEl.textContent = timeLeft;
 
             if (timeLeft <= 0) { 
                 clearInterval(roundTimerInterval);
+
+                // We'll say the score cannot be less than zero -- if it is, reset it to zero
+                if (timeLeft < 0) {
+                    timeLeft = 0;
+                    timerEl.textContent = 0;
+                }
+
+                showAllDoneScreen(timeLeft);
             }
         }, 1000);
     }
@@ -146,6 +153,7 @@ function runQuiz() {
         } else { // Answered incorrectly
             showAnswerResult("Wrong!");
             timeLeft -= wrongAnswerDecrement;
+            timerEl.textContext = timeLeft;
         }
 
         if ((numQuestionsAsked < maxNumQuestions) && (numQuestionsAsked < questions.length)) {
@@ -154,11 +162,16 @@ function runQuiz() {
         } else { 
             // Asked all the questions -- stop the timer and show all done screen
             clearInterval(roundTimerInterval);
+
+            // We'll say the score cannot be less than zero -- if it is, reset it to zero
+            if (timeLeft < 0) {
+                timeLeft = 0;
+                timerEl.textContent = 0;
+            }
+
             showAllDoneScreen(timeLeft);
         }
     })
-
-    // Randomly pull new question from list of available questions
 
     // Clear the screen
     $("#play-area").empty();
@@ -196,15 +209,36 @@ function showStartScreen() {
     playAreaEl.append(startQuizButton); 
 }
 
+// Display the All done screen, prompt user to enter initials
 function showAllDoneScreen(userScore) {
     // Elements
     var headerEl = document.createElement("h3");
     var scoreReportEl = document.createElement("p");
-    var initalsSpan = document.createElement("span");
+    var initialsSpan = document.createElement("span");
+    var initialsLabelEl = document.createElement("p");
+    var initialsTextBoxEl = document.createElement("input");
+    initialsTextBoxEl.setAttribute("type", "text");
+    var submitButton = document.createElement("button");
+
+    // Event listener for submit button
+    submitButton.addEventListener("click", function() {
+        // Check to see if the user entered any text
+        if ((initialsTextBoxEl.value) && (initialsTextBoxEl.value.length > 0)) {
+            // Nothing yet
+
+        }
+        
+        // Add user to list of high scores
+        // addUserToListOfHighScores()
+
+        // Show high scores screen
+    })
 
     // Fill in the text for the header and the score report
     headerEl.textContent = "All done!";
     scoreReportEl.textContent = "Your final score is " + userScore + ".";
+    initialsLabelEl.textContent = "Enter initials";
+    submitButton.textContent = "Submit";
 
     // Clear the screen
     $("#play-area").empty();
@@ -212,6 +246,10 @@ function showAllDoneScreen(userScore) {
     // Show our elements
     playAreaEl.append(headerEl);
     playAreaEl.append(scoreReportEl);
+    playAreaEl.append(initialsSpan);
+    initialsSpan.append(initialsLabelEl);
+    initialsSpan.append(initialsTextBoxEl);
+    initialsSpan.append(submitButton);
 }
 
 // On initial page load, show start screen
