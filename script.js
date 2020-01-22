@@ -75,7 +75,7 @@ function runQuiz() {
 
         for (var k = 0; k < questions[currentQuestionIndex].choices.length; k++) {
             var answerEl = document.createElement("div");
-            answerEl.textContent = questions[currentQuestionIndex].choices[k];
+            answerEl.textContent = (k + 1) + " " + questions[currentQuestionIndex].choices[k];
             answerEl.setAttribute("data-question-id", currentQuestionIndex);
             answerEl.setAttribute("data-answer-id", k);
 
@@ -154,7 +154,7 @@ function runQuiz() {
         } else { 
             // Asked all the questions -- stop the timer and show all done screen
             clearInterval(roundTimerInterval);
-            showAllDoneScreen();
+            showAllDoneScreen(timeLeft);
         }
     })
 
@@ -182,6 +182,9 @@ function showStartScreen() {
         runQuiz();
     })
 
+    // Clear the screen
+    $("#play-area").empty();
+
     // Fill in the text for the header, description, and start button
     headerEl.textContent = "Coding Quiz Challenge";
     descriptionEl.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
@@ -193,8 +196,22 @@ function showStartScreen() {
     playAreaEl.append(startQuizButton); 
 }
 
-function showAllDoneScreen () {
-    // Nothing yet
+function showAllDoneScreen(userScore) {
+    // Elements
+    var headerEl = document.createElement("h3");
+    var scoreReportEl = document.createElement("p");
+    var initalsSpan = document.createElement("span");
+
+    // Fill in the text for the header and the score report
+    headerEl.textContent = "All done!";
+    scoreReportEl.textContent = "Your final score is " + userScore + ".";
+
+    // Clear the screen
+    $("#play-area").empty();
+
+    // Show our elements
+    playAreaEl.append(headerEl);
+    playAreaEl.append(scoreReportEl);
 }
 
 // On initial page load, show start screen
